@@ -1,14 +1,15 @@
-pragma solidity 0.8.4;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
 
 contract ApartmentFactory {
     address[] public deployedApartments;
 
-    function createApartment(string[] images, string countryArg, string cityArg, string descriptionArg, uint priceForDayArg) public {
-        address newApartment = new Apartment(msg.sender, images, countryArg, cityArg, descriptionArg, priceForDayArg);
+    function createApartment(string[] memory images, string memory countryArg, string memory cityArg, string memory descriptionArg, uint priceForDayArg) public {
+        address newApartment = address(new Apartment(msg.sender, images, countryArg, cityArg, descriptionArg, priceForDayArg));
         deployedApartments.push(newApartment);
     }
 
-    function getDeployedApartments() public view returns (address[]) {
+    function getDeployedApartments() public view returns (address[] memory) {
         return deployedApartments;
     }
 }
@@ -24,7 +25,7 @@ contract Apartment {
     mapping(address => string) public tenantFirstDateRent;
     mapping(address => uint) public tenantBalance;
 
-    function Apartment(address owner, string[] images, string countryArg, string cityArg, string descriptionArg, uint priceForDayArg) public {
+    constructor(address owner, string[] memory images, string memory countryArg, string memory cityArg, string memory descriptionArg, uint priceForDayArg){
         landlord = owner;
         apartmentImages = images;
         country = countryArg;
@@ -33,7 +34,7 @@ contract Apartment {
         priceForDay = priceForDayArg;
     }
 
-    function rent(string[] dates) public payable {
+    function rent(string[] memory dates) public payable {
         require(msg.value == (dates.length * priceForDay));
 
         for (uint i=0; i < dates.length; i++) {
@@ -42,26 +43,26 @@ contract Apartment {
     }
 
     function getSummary() public view returns (
-        string[], string, string, string, uint
+        string[] memory, string memory, string memory, string memory, uint
     ) {
         return (
-            apartmentImages,
-            country,
-            city,
-            description,
-            priceForDay
+        apartmentImages,
+        country,
+        city,
+        description,
+        priceForDay
         );
     }
 
     // if tenant lived for whole period and everything is ok, money goes to landlord
-    function payForRent() {
-        landlord.transfer(tenantBalance[msg.sender]);
+    function payForRent() public {
+        payable(landlord).transfer(tenantBalance[msg.sender]);
     }
 
     // if tenant goes to apartment and see that somethings's wrong, he cancel reservation. Only possible on first day of rent
-    function cancelRent(string date) {
-        require(tenantFirstDateRent[msg.sender] == date);
+    function cancelRent(string memory date) public {
+        require(keccak256(abi.encodePacked(tenantFirstDateRent[msg.sender])) == keccak256(abi.encodePacked(date)));
 
-        msg.sender.transfer(tenantBalance[msg.sender]);
+        payable(msg.sender).transfer(tenantBalance[msg.sender]);
     }
 }
