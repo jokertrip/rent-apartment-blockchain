@@ -10,6 +10,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.9",
     "fs-extra": "^10.1.0",
     "ganache-cli": "^6.12.2",
     "mocha": "^10.0.0",
