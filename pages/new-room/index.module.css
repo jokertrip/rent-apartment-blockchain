@@ -14,12 +14,32 @@
 
 .formField {
     padding: 0.5rem;
-    height: 0.5rem;
+    height: 0.8rem;
+    border: 1px solid #CBCBCB;
+}
+
+.formFieldFiles {
+    padding: 0.5rem;
+    height: 1rem;
+    margin-bottom: 1rem;
 }
 
 .formFieldDesc {
-    padding: 0.5rem;
-    height: 4rem;
+    padding: 5px;
+    resize: none;
+    height: 4.5rem;
+    border: 1px solid #CBCBCB;
+}
+
+.display {
+    display: flex;
+    flex-direction: row;
+}
+
+.image {
+    margin-right: 1rem;
+    width: 15rem;
+    height: 15rem;
 }
 
 .formSubmitBtn {
@@ -27,4 +47,9 @@
     min-width: 5rem;
     background-color: #EB2353;
     color: black;
+}
+
+.error {
+    color: red;
+    margin-top: 0.5rem;
 }

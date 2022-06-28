@@ -7,7 +7,7 @@ let provider = new HDWalletProvider({
     mnemonic: {
         phrase: process.env.MNEMONIC_PHRASE
     },
-    providerOrUrl: process.env.NODE
+    providerOrUrl: process.env.RINKEBY_NODE
 });
 
 const web3 = new Web3(provider);
