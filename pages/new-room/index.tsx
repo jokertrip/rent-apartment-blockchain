@@ -5,6 +5,7 @@ import Select from "react-select";
 import { create } from 'ipfs-http-client'
 import classes from "./index.module.css";
 import selectOptions from '../../data.json'
+import {factory, web3} from '../../ethereum/web3utils';
 
 interface FormInputs {
     image: FileList;
@@ -21,12 +22,21 @@ const NewRoom: NextPage = () => {
     const [fileUrlArr, updateFileUrlArr] = React.useState<string[]>([])
     const {register, handleSubmit, control, formState: { errors }} = useForm<FormInputs>();
 
-    const registerOptions = {
-        country: { required: "Country is required" }
-    };
+    const onSubmit = async (data: FormInputs) => {
+        try {
+            let web3L = web3()
+            let factoryL = factory()
+            const accounts = await web3L.eth.getAccounts();
+            await factoryL.methods
+                .createApartment(fileUrlArr, data.country, data.city, data.description, data.priceForDay)
+                .send({
+                    from: accounts[0],
+                });
 
-    const onSubmit = (data: FormInputs) => {
-        console.log(data)
+        } catch (err) {
+            console.log('error', err)
+        }
+        console.log('Finished')
     };
 
     const uploadFile = async (e: any) => {
@@ -82,7 +92,8 @@ const NewRoom: NextPage = () => {
                 </div>
                 <div className={classes.formGroup}>
                     <label className={classes.formLabel}>Price for day:</label>
-                    <input className={classes.formField} type="number" {...register("priceForDay")}  />
+                    <input className={classes.formField} type="number" {...register("priceForDay", { required: "Price is required." })}  />
+                    {errors.priceForDay && <div className={classes.error}>{errors.priceForDay.message}</div>}
                 </div>
                 <button className={classes.formSubmitBtn} type="submit">Submit</button>
             </form>
