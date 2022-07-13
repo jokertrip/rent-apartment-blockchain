@@ -1,15 +1,21 @@
 import {NextPage} from 'next'
+import Router from 'next/router';
 import React from "react";
 import {useForm, Controller} from "react-hook-form";
 import Select from "react-select";
 import { create } from 'ipfs-http-client'
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import classes from "./index.module.css";
 import selectOptions from '../../data.json'
 import {factory, web3} from '../../ethereum/web3utils';
+import {element} from "prop-types";
 
 interface FormInputs {
     image: FileList;
-    country: string;
+    country: {
+        value: string
+        label: string
+    };
     city: string;
     description: string;
     priceForDay: number;
@@ -20,23 +26,26 @@ const client = create('https://ipfs.infura.io:5001/api/v0')
 
 const NewRoom: NextPage = () => {
     const [fileUrlArr, updateFileUrlArr] = React.useState<string[]>([])
-    const {register, handleSubmit, control, formState: { errors }} = useForm<FormInputs>();
+    const [loading, setLoading] = React.useState<boolean>(false)
+    const { register, handleSubmit, control, formState: { errors } } = useForm<FormInputs>();
 
     const onSubmit = async (data: FormInputs) => {
+        setLoading(true)
         try {
             let web3L = web3()
             let factoryL = factory()
             const accounts = await web3L.eth.getAccounts();
             await factoryL.methods
-                .createApartment(fileUrlArr, data.country, data.city, data.description, data.priceForDay)
+                .createApartment(fileUrlArr, data.country.label, data.city, data.description, data.priceForDay)
                 .send({
                     from: accounts[0],
                 });
-
-        } catch (err) {
+            await Router.push('/')
+        } catch (err: any) {
+            alert(err.message)
             console.log('error', err)
         }
-        console.log('Finished')
+        setLoading(false)
     };
 
     const uploadFile = async (e: any) => {
@@ -50,6 +59,10 @@ const NewRoom: NextPage = () => {
         }
     }
 
+    const deleteFile = (url: string) => {
+        updateFileUrlArr(fileUrlArr.filter(el => el !== url))
+    }
+
     return (
         <React.Fragment>
             <h2>Add an apartment</h2>
@@ -60,7 +73,12 @@ const NewRoom: NextPage = () => {
                     <div className={classes.display}>
                     {
                         fileUrlArr && fileUrlArr.map(url =>
-                            <img className={classes.image} src={url} />
+                            <div className={classes.imageContainer}>
+                                <img className={classes.image} src={url} />
+                                <div onClick={() => deleteFile(url)}>
+                                    <AiOutlineCloseCircle className={classes.icon} />
+                                </div>
+                            </div>
                         )
                     }
                     </div>
@@ -95,7 +113,7 @@ const NewRoom: NextPage = () => {
                     <input className={classes.formField} type="number" {...register("priceForDay", { required: "Price is required." })}  />
                     {errors.priceForDay && <div className={classes.error}>{errors.priceForDay.message}</div>}
                 </div>
-                <button className={classes.formSubmitBtn} type="submit">Submit</button>
+                <button className={classes.formSubmitBtn} type="submit" disabled={loading}>{loading? <span>loading</span> : <span>Submit</span>}</button>
             </form>
         </React.Fragment>
     )

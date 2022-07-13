@@ -36,10 +36,21 @@
     flex-direction: row;
 }
 
+.imageContainer {
+    position: relative;
+}
+
 .image {
     margin-right: 1rem;
     width: 15rem;
     height: 15rem;
+}
+
+.icon {
+    font-size: 2rem;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .formSubmitBtn {
@@ -47,6 +58,10 @@
     min-width: 5rem;
     background-color: #EB2353;
     color: black;
+}
+
+.formSubmitBtn:disabled {
+    opacity: 0.5;
 }
 
 .error {

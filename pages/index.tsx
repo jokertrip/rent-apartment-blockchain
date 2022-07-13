@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     }, [])
 
   return (
-    <div>
+    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
         {apartments.length > 0 && apartments.map(address=> <Card address={address}/>)}
     </div>
   )
