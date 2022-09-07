@@ -1,5 +1,5 @@
 import Header from './Header'
-import React from 'react'
+import React, { Fragment } from 'react'
 
 type Props = {
     children?: React.ReactNode;
@@ -7,10 +7,10 @@ type Props = {
 
 const Layout = ({children}:Props) => {
     return (
-        <div>
+        <Fragment>
             <Header />
             {children}
-        </div>
+        </Fragment>
     )
 }
 export default Layout

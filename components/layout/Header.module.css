@@ -1,8 +1,29 @@
 .header {
-    width: 100%;
-    height: 5rem;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    background-color: #EB2353;
+    align-items: baseline;
+    padding: 1rem 10%;
+    height: 5rem;
+    background-color: #202020;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-family: 'Fira', sans-serif;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #94fdfd;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #94fdfd;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: #74dacc;
+    font-size: 1rem;
 }

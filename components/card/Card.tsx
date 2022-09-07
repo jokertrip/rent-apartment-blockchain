@@ -2,6 +2,7 @@ import React from "react";
 import { apartment } from "../../ethereum/web3utils";
 import classes from "./Card.module.css";
 import {NextPage} from "next";
+import Link from "next/link";
 
 type Props = {
     address: string
@@ -16,8 +17,8 @@ const Card: NextPage<Props> = ({address}) => {
 
     React.useEffect(()=>{
         const func = async () => {
-            const apartmentL = apartment(address)
-            const summary = await apartmentL.methods.getSummary().call();
+            const _apartment = apartment(address)
+            const summary = await _apartment.methods.getSummary().call();
             setImages(summary[0])
             setCountry(summary[1])
             setCity(summary[2])
@@ -28,15 +29,17 @@ const Card: NextPage<Props> = ({address}) => {
     },[])
 
     return (
-        <div className={classes.card}>
-            <img className={classes.image} src={images[0]}/>
-            <div className={classes.cardBody}>
-                <p>Country: {country}</p>
-                <p>City: <strong>{city}</strong></p>
-                <p>Description: <strong>{desc}</strong></p>
-                <p>Price: <strong>{priceForDay}</strong></p>
+        <Link href='/'>
+            <div className={classes.card}>
+                <img className={classes.image} src={images[0]}/>
+                <div className={classes.cardBody}>
+                    <p>Country: {country}</p>
+                    <p>City: <strong>{city}</strong></p>
+                    <p>Description: <strong>{desc}</strong></p>
+                    <p>Price: <strong>{priceForDay}</strong></p>
+                </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

@@ -8,7 +8,6 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import classes from "./index.module.css";
 import selectOptions from '../../data.json'
 import {factory, web3} from '../../ethereum/web3utils';
-import {element} from "prop-types";
 
 interface FormInputs {
     image: FileList;
@@ -32,10 +31,10 @@ const NewRoom: NextPage = () => {
     const onSubmit = async (data: FormInputs) => {
         setLoading(true)
         try {
-            let web3L = web3()
-            let factoryL = factory()
-            const accounts = await web3L.eth.getAccounts();
-            await factoryL.methods
+            let _web3 = web3()
+            let _factory = factory()
+            const accounts = await _web3!.eth.getAccounts();
+            await _factory.methods
                 .createApartment(fileUrlArr, data.country.label, data.city, data.description, data.priceForDay)
                 .send({
                     from: accounts[0],

@@ -9,9 +9,9 @@ const Home: NextPage = () => {
     React.useEffect(()=>{
         try{
             const func = async () =>{
-                let factoryL = factory()
-                if(factoryL){
-                    const deployedApartments = await factoryL.methods.getDeployedApartments().call();
+                let _factory = factory()
+                if(_factory){
+                    const deployedApartments = await _factory.methods.getDeployedApartments().call();
                     setApartments(deployedApartments)
                 }
             }
